@@ -57,3 +57,14 @@ BOOST_AUTO_TEST_CASE( different_scale ) {
     BOOST_TEST(std::string(f1_2)=="1.23");
 
 }
+
+BOOST_AUTO_TEST_CASE( str ) {
+    char buffer[Fixed<7>::BUFFER_SIZE];
+
+    Fixed f("1234.5678");
+
+    f.str(buffer);
+
+    BOOST_TEST(strcmp(buffer,"1234.5678")==0,buffer);
+}
+

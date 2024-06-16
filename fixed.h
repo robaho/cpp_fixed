@@ -27,27 +27,26 @@ private:
     }
 
     int64_t fp;
-    std::string toStr(int &decimal) const {
+    std::string_view toStr(char *buffer, int &decimal) const {
         if(fp==nan) {
             decimal=-1;
             return "NaN";
         }
         if(fp==0) {
             decimal=1;
-            return std::string(zeros());
+            return zeros();
         }
-        return itoa(fp,decimal);
+        return itoa(buffer,fp,decimal);
     }
-    static std::string itoa(int64_t val,int &decimal) {
+    static std::string_view itoa(char *buf,int64_t val,int &decimal) {
         bool neg = val < 0;
-        char buf[24+1];
 
         if(neg) {
             val = val * -1;
         }
 
-        buf[sizeof(buf)-1]=0;
-        int i = sizeof(buf)-1-1;
+        buf[BUFFER_SIZE-1]=0;
+        int i = BUFFER_SIZE-1-1;
         int idec = i - nPlaces;
 
         for(;val >= 10 || i >= idec;) {
@@ -65,12 +64,15 @@ private:
             buf[i] = '-';
         }
         decimal = idec-i;
-        return std::string(buf+i);
+        return buf+i;
     }
+
     explicit Fixed(int64_t raw) {
         fp=raw;
     }
 public:
+    constexpr static const int BUFFER_SIZE = 24;
+
     Fixed(const char *s) {
         for(auto *cp=s;*cp;cp++) {
             if(*cp=='E' || *cp=='e') {
@@ -257,23 +259,48 @@ public:
     }
 
     operator std::string() const {
+        char buffer[24];
         int point;
-        auto s = toStr(point);
-        if(point==-1) return s;
+        auto s = toStr(buffer,point);
+        if(point==-1) return std::string(s);
         int index = s.length() - 1;
         for(;index!=point;index--) {
             if(s[index]!='0') {
-                return s.substr(0,index+1);
+                return std::string(s.substr(0,index+1));
             }
         }
-        return s.substr(0,point);
+        return std::string(s.substr(0,point));
     }
     std::string stringN(int decimals) {
+        char buffer[BUFFER_SIZE];
         int point;
-        auto s = toStr(point);
-        if(point==-1) return s;
-        if(decimals==0) return s.substr(0,point);
-        return s.substr(0,point+decimals+1);
+        auto s = toStr(buffer,point);
+        if(point==-1) return std::string(s);
+        if(decimals==0) return std::string(s.substr(0,point));
+        return std::string(s.substr(0,point+decimals+1));
+    }
+
+    /** write Fixed as string into buffer. buffer must be at least BUFFER_SIZE. */
+    void str(char *buffer) {
+        char tmp[BUFFER_SIZE];
+
+        int point;
+        auto s = toStr(tmp,point);
+        if(point==-1) { 
+            memcpy(buffer,s.data(),s.length());
+            buffer[s.length()]=0;
+            return; 
+        };
+        int index = s.length() - 1;
+        for(;index!=point;index--) {
+            if(s[index]!='0') {
+                memcpy(buffer,s.data(),index+1);
+                buffer[index+1]=0;
+                return;
+            }
+        }
+        memcpy(buffer,s.data(),point);
+        buffer[point]=0;
     }
 };
 
