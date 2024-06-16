@@ -7,6 +7,7 @@ BOOST_AUTO_TEST_CASE( basic_test ) {
     BOOST_TEST(std::string(Fixed("0"))=="0");
     BOOST_TEST(std::string(Fixed("0.1"))=="0.1");
     BOOST_TEST(std::string(Fixed("123.456"))=="123.456");
+    BOOST_TEST(std::string(Fixed("1.123456789"))=="1.1234567");
 }
 
 BOOST_AUTO_TEST_CASE( to_double ) {
@@ -44,4 +45,15 @@ BOOST_AUTO_TEST_CASE( multiply_divide ) {
     BOOST_TEST(Fixed("1000")/Fixed("10")=="100");
     BOOST_TEST(Fixed("1000")/Fixed("0.1")=="10000");
     BOOST_TEST(Fixed("1")*Fixed("0.1")=="0.1");
+}
+
+BOOST_AUTO_TEST_CASE( different_scale ) {
+    typedef Fixed<2> Fixed2;
+
+    Fixed2 f0_2("1.23456");
+    BOOST_TEST(std::string(f0_2)=="1.23");
+
+    Fixed2 f1_2("1.23678");
+    BOOST_TEST(std::string(f1_2)=="1.23");
+
 }

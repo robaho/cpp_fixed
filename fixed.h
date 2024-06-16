@@ -1,29 +1,40 @@
 #pragma once
 
 #include <cstdlib>
+#include <string_view>
 #include <unistd.h>
 #include <stdlib.h>
 #include <string>
 #include <cmath>
 
-class Fixed;
+constexpr double pow10(int exp)
+{
+    int total = 1;
+    while(exp--) total*=10;
+    return total;
+}
 
+template<int nPlaces=7>
 class Fixed {
 private:
-    static const int nPlaces = 7;
-    static const int64_t scale = 10*10*10*10*10*10*10;
-    constexpr static const double MAX = 99999999999.9999999;
+    constexpr static const int64_t scale = int64_t(pow10(nPlaces));
+    constexpr static const double MAX = 999999999999999999.0 / scale;
     constexpr static const int64_t nan = (int64_t)((1ULL<<63)-1);
+
+    constexpr static std::string_view zeros() {
+        const char* _zeros = "0.0000000000000000";
+        return std::basic_string_view(_zeros,2+nPlaces);
+    }
+
     int64_t fp;
     std::string toStr(int &decimal) const {
-        static std::string zeros = "0000000";
         if(fp==nan) {
             decimal=-1;
             return "NaN";
         }
         if(fp==0) {
             decimal=1;
-            return "0."+zeros;
+            return std::string(zeros());
         }
         return itoa(fp,decimal);
     }
@@ -78,8 +89,11 @@ public:
         int64_t sign = 1;
         if(decimal) {
             auto cp = decimal + 1;
-            f = atoll(cp);
-            for(int p = strlen(cp); p<nPlaces;p++,f*=10);
+            f = 0;
+            for(int p = 0; p<nPlaces;p++) {
+                if(*cp==0) f*=10;
+                else f = f*10 + (*cp++)-'0';
+            }
         }
         if(i<0) {
             sign=-1;
@@ -104,10 +118,10 @@ public:
     }
     Fixed(int64_t i,int n) {
         if(n > nPlaces) {
-            i = i / (pow(10,n-nPlaces));
+            i = i / (pow10(n-nPlaces));
             n = nPlaces;
         }
-        fp = i * pow(10,nPlaces-n);
+        fp = i * pow10(nPlaces-n);
     }
     bool isNaN() const { return fp == nan; }
     bool isZero() const { return fp == 0; }
@@ -263,7 +277,8 @@ public:
     }
 };
 
-inline std::ostream& operator<<(std::ostream& os, const Fixed& f)
+template <int nPlaces=7>
+inline std::ostream& operator<<(std::ostream& os, const Fixed<nPlaces>& f)
 {
     return os << std::string(f);
 }
