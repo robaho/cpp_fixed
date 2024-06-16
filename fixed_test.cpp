@@ -47,6 +47,11 @@ BOOST_AUTO_TEST_CASE( multiply_divide ) {
     BOOST_TEST(Fixed("1")*Fixed("0.1")=="0.1");
 }
 
+BOOST_AUTO_TEST_CASE( compare) {
+    BOOST_TEST(Fixed("123.456")<Fixed("123.457"));
+    BOOST_TEST(Fixed("123.457")>Fixed("123.456"));
+}
+
 BOOST_AUTO_TEST_CASE( different_scale ) {
     typedef Fixed<2> Fixed2;
 

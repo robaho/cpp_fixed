@@ -200,8 +200,20 @@ public:
         auto d2 = double(other);
         return Fixed(d1/d2);
     }
+    bool operator<(const Fixed& other) const {
+        return cmp(other) < 0;
+    }
+    bool operator<=(const Fixed& other) const {
+        return cmp(other) <= 0;
+    }
+    bool operator>(const Fixed& other) const {
+        return cmp(other) > 0;
+    }
+    bool operator>=(const Fixed& other) const {
+        return cmp(other) >= 0;
+    }
 
-    int compare(const Fixed& other) const {
+    int cmp(const Fixed& other) const {
         if (isNaN() && other.isNaN()) {
             return 0;
         }
@@ -222,7 +234,7 @@ public:
     }
 
     int sign() const {
-        return compare(0);
+        return cmp(0);
     }
 
     Fixed abs() const {
