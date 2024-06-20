@@ -7,7 +7,7 @@
 #include <string>
 #include <cmath>
 
-constexpr double pow10(int exp)
+constexpr int pow10(int exp)
 {
     int total = 1;
     while(exp--) total*=10;
