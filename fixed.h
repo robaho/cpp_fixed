@@ -186,12 +186,14 @@ public:
         auto fp0_a = other.fp / scale;
         auto fp0_b = other.fp % scale;
 
+        auto _sign = sign()*other.sign();
+
         int64_t result=0;
         if (fp0_a != 0) {
             result = fp_a*fp0_a*scale + fp_b*fp0_a;
         }
         if (fp0_b != 0) {
-            result = result + (fp_a * fp0_b) + ((fp_b)*fp0_b+5*(scale/10))/scale;
+            result = result + (fp_a * fp0_b) + ((fp_b)*fp0_b+5*_sign*(scale/10))/scale;
         }
         return Fixed((int64_t)result);
     }
