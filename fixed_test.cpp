@@ -45,6 +45,7 @@ BOOST_AUTO_TEST_CASE( multiply_divide ) {
     BOOST_TEST(Fixed("1000")/Fixed("10")=="100");
     BOOST_TEST(Fixed("1000")/Fixed("0.1")=="10000");
     BOOST_TEST(Fixed("1")*Fixed("0.1")=="0.1");
+    BOOST_TEST(Fixed("0.000001")*Fixed("0.066248")=="0.0000001");
 }
 
 BOOST_AUTO_TEST_CASE( compare) {
