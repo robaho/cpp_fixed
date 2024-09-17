@@ -10,6 +10,13 @@ BOOST_AUTO_TEST_CASE( basic_test ) {
     BOOST_TEST(std::string(Fixed("1.123456789"))=="1.1234567");
 }
 
+BOOST_AUTO_TEST_CASE(exponent ) {
+    BOOST_TEST(std::string(Fixed("1.0E1"))=="10");
+    BOOST_TEST(std::string(Fixed("1.0E-1"))=="0.1");
+    BOOST_TEST(std::string(Fixed("1.2345E4"))=="12345");
+    BOOST_TEST(std::string(Fixed("1.2345e4"))=="12345");
+}
+
 BOOST_AUTO_TEST_CASE( to_double ) {
     BOOST_TEST(double(Fixed("0.1"))==0.1);
 }

@@ -2,6 +2,7 @@
 
 #include <cstdlib>
 #include <string_view>
+#include <charconv>
 #include <unistd.h>
 #include <stdlib.h>
 #include <string>
@@ -74,11 +75,11 @@ public:
     constexpr static const int BUFFER_SIZE = 24;
 
     Fixed(const char *s) {
+        const char* exp = nullptr;
         for(auto *cp=s;*cp;cp++) {
             if(*cp=='E' || *cp=='e') {
-                double f = atof(s);
-                fp = Fixed(f).fp;
-                return;
+                exp = cp;
+                break;
             }
         }
         if(strcmp(s,"NaN")==0) {
@@ -93,7 +94,7 @@ public:
             auto cp = decimal + 1;
             f = 0;
             for(int p = 0; p<nPlaces;p++) {
-                if(*cp==0) f*=10;
+                if(*cp==0 || *cp=='E' || *cp=='e') f*=10;
                 else f = f*10 + (*cp++)-'0';
             }
         }
@@ -102,6 +103,13 @@ public:
             i*=-1;
         }
         fp = (sign * (i*scale +f));
+        if(exp) {
+            auto _exp = atoll(exp+1);
+            if(_exp>=0)
+                fp *= pow10(std::abs(_exp));
+            else
+                fp /= pow10(std::abs(_exp));
+        }
     }
     Fixed(double f) {
         if(isnan(f)) {
