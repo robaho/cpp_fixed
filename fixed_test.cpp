@@ -70,6 +70,10 @@ BOOST_AUTO_TEST_CASE( compare) {
     BOOST_TEST(Fixed("123.457")>Fixed("123.456"));
 }
 
+BOOST_AUTO_TEST_CASE( nan_test) {
+    BOOST_TEST(Fixed<7>::NaN()=="NaN");
+}
+
 BOOST_AUTO_TEST_CASE( different_scale ) {
     typedef Fixed<2> Fixed2;
 

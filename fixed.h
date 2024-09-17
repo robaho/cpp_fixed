@@ -8,7 +8,7 @@
 #include <string>
 #include <cmath>
 
-constexpr int pow10(int exp)
+constexpr int pow10(uint32_t exp)
 {
     int total = 1;
     while(exp--) total*=10;
@@ -73,6 +73,9 @@ private:
     }
 public:
     constexpr static const int BUFFER_SIZE = 24;
+    const static Fixed<nPlaces> NaN() {
+        return Fixed((int64_t)nan);
+    }
 
     Fixed(const char *s) {
         const char* exp = nullptr;
