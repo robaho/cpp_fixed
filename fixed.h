@@ -111,6 +111,46 @@ public:
                 fp /= pow10(std::abs(_exp));
         }
     }
+    Fixed(std::string_view s) {
+        const char* end = s.data()+s.length();
+        const char* exp = nullptr;
+        for(auto *cp=s.data();cp!=end;cp++) {
+            if(*cp=='E' || *cp=='e') {
+                exp = cp;
+                break;
+            }
+        }
+        if(s=="NaN") {
+            fp = nan;
+            return;
+        }
+        auto decimal = s.find('.');
+        int64_t i;
+        std::from_chars(s.data(),end,i);
+        int64_t f = 0;
+        int64_t sign = 1;
+        if(decimal>=0) {
+            auto cp = s.data() + decimal + 1;
+            f = 0;
+            for(int p = 0; p<nPlaces;p++) {
+                if(cp==exp || cp==end) f*=10;
+                else f = f*10 + (*cp++)-'0';
+            }
+        }
+        if(i<0) {
+            sign=-1;
+            i*=-1;
+        }
+        fp = (sign * (i*scale +f));
+        if(exp) {
+            int _exp;
+            std::from_chars(exp+1,end,_exp);
+            if(_exp>=0)
+                fp *= pow10(std::abs(_exp));
+            else
+                fp /= pow10(std::abs(_exp));
+        }
+    }
     Fixed(double f) {
         if(isnan(f)) {
             fp = nan;

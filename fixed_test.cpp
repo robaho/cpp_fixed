@@ -10,6 +10,15 @@ BOOST_AUTO_TEST_CASE( basic_test ) {
     BOOST_TEST(std::string(Fixed("1.123456789"))=="1.1234567");
 }
 
+BOOST_AUTO_TEST_CASE( string_view ) {
+    BOOST_TEST(std::string(Fixed(std::string_view("0")))=="0");
+    BOOST_TEST(std::string(Fixed(std::string_view("0.1")))=="0.1");
+    BOOST_TEST(std::string(Fixed(std::string_view("123.456")))=="123.456");
+    BOOST_TEST(std::string(Fixed(std::string_view("1.123456789")))=="1.1234567");
+    BOOST_TEST(std::string(Fixed(std::string_view("123.456",4)))=="123");
+    BOOST_TEST(std::string(Fixed(std::string_view("123.456",5)))=="123.4");
+}
+
 BOOST_AUTO_TEST_CASE(exponent ) {
     BOOST_TEST(std::string(Fixed("1.0E1"))=="10");
     BOOST_TEST(std::string(Fixed("1.0E-1"))=="0.1");
