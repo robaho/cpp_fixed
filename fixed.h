@@ -68,7 +68,7 @@ private:
         return buf+i;
     }
 
-    explicit Fixed(int64_t raw) {
+    inline explicit Fixed(int64_t raw) {
         fp=raw;
     }
 public:
@@ -176,26 +176,26 @@ public:
         }
         fp = i * pow10(nPlaces-n);
     }
-    bool isNaN() const { return fp == nan; }
-    bool isZero() const { return fp == 0; }
-    Fixed(const Fixed& other) {
+    inline bool isNaN() const { return fp == nan; }
+    inline bool isZero() const { return fp == 0; }
+    inline Fixed(const Fixed& other) {
         fp = other.fp;
     }
-    Fixed(Fixed&& other) {
+    inline Fixed(Fixed&& other) {
         fp = other.fp;
     }
 
-    explicit operator double() const {
+    inline explicit operator double() const {
         return ((double)fp) / (double)scale;
     }
 
-    bool operator==(const Fixed& other) const {
+    inline bool operator==(const Fixed& other) const {
         return fp == other.fp;
     }
     bool operator==(const char* s) const {
         return fp == Fixed(s).fp;
     }
-    Fixed& operator=(const Fixed& other) {
+    inline Fixed& operator=(const Fixed& other) {
         if(fp==nan || other.fp==nan) {
             fp = nan;
         } else {
@@ -203,7 +203,7 @@ public:
         }
         return *this;
     }
-    Fixed& operator=(Fixed&& other) {
+    inline Fixed& operator=(Fixed&& other) {
         if(fp==nan || other.fp==nan) {
             fp = nan;
         } else {
@@ -212,14 +212,14 @@ public:
         return *this;
     }
 
-    Fixed operator+(const Fixed& other) const {
+    inline Fixed operator+(const Fixed& other) const {
         if(fp==nan || other.fp==nan) {
             return Fixed((int64_t)nan);
         } else {
             return Fixed((int64_t)(fp + other.fp));
         }
     }
-    Fixed operator-(const Fixed& other) const {
+    inline Fixed operator-(const Fixed& other) const {
         if(fp==nan || other.fp==nan) {
             return Fixed((int64_t)nan);
         } else {
@@ -227,7 +227,7 @@ public:
         }
         return *this;
     }
-    Fixed operator*(const Fixed& other) const {
+    inline Fixed operator*(const Fixed& other) const {
         if(fp==nan || other.fp==nan) {
             return Fixed((int64_t)nan);
         }
@@ -248,26 +248,26 @@ public:
         }
         return Fixed((int64_t)result);
     }
-    Fixed operator/(const Fixed& other) const {
+    inline Fixed operator/(const Fixed& other) const {
         auto d1 = operator double();
         auto d2 = double(other);
         return Fixed(d1/d2);
     }
-    bool operator<(const Fixed& other) const {
+    inline bool operator<(const Fixed& other) const {
         return cmp(other) < 0;
     }
-    bool operator<=(const Fixed& other) const {
+    inline bool operator<=(const Fixed& other) const {
         return cmp(other) <= 0;
     }
-    bool operator>(const Fixed& other) const {
+    inline bool operator>(const Fixed& other) const {
         return cmp(other) > 0;
     }
-    bool operator>=(const Fixed& other) const {
+    inline bool operator>=(const Fixed& other) const {
         return cmp(other) >= 0;
     }
 
-    int cmp(const Fixed& other) const {
-        if (isNaN() && other.isNaN()) {
+    inline int cmp(const Fixed& other) const {
+        if(fp == other.fp) {
             return 0;
         }
         if(isNaN()) {
@@ -275,10 +275,6 @@ public:
         }
         if(other.isNaN()) {
             return -1;
-        }
-
-        if(fp == other.fp) {
-            return 0;
         }
         if(fp<other.fp){
             return -1;
