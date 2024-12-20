@@ -8,8 +8,6 @@
 #include <string>
 #include <cmath>
 
-using namespace std;
-
 constexpr int pow10(uint32_t exp)
 {
     int total = 1;
@@ -87,11 +85,11 @@ public:
                 break;
             }
         }
-        if(strcmp(s,"NaN")==0) {
+        if(std::strcmp(s,"NaN")==0) {
             fp = nan;
             return;
         }
-        const char *decimal = strchr(s,'.');
+        const char *decimal = std::strchr(s,'.');
         int64_t i = atoll(s);
         int64_t f = 0;
         int64_t sign = 1;
