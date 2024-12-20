@@ -8,6 +8,8 @@
 #include <string>
 #include <cmath>
 
+using namespace std;
+
 constexpr int pow10(uint32_t exp)
 {
     int total = 1;
@@ -155,7 +157,7 @@ public:
         }
     }
     Fixed(double f) {
-        if(std::isnan(f)) {
+        if(isnan(f)) {
             fp = nan;
         } else {
             if(f >= MAX || f <= -MAX) {
