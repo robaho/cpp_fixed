@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <string>
 #include <cmath>
+#include <cstring>
 
 constexpr int pow10(uint32_t exp)
 {
@@ -85,11 +86,11 @@ public:
                 break;
             }
         }
-        if(std::strcmp(s,"NaN")==0) {
+        if(strcmp(s,"NaN")==0) {
             fp = nan;
             return;
         }
-        const char *decimal = std::strchr(s,'.');
+        const char *decimal = strchr(s,'.');
         int64_t i = atoll(s);
         int64_t f = 0;
         int64_t sign = 1;
@@ -155,7 +156,7 @@ public:
         }
     }
     Fixed(double f) {
-        if(isnan(f)) {
+        if(std::isnan(f)) {
             fp = nan;
         } else {
             if(f >= MAX || f <= -MAX) {
