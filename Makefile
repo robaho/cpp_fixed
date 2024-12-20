@@ -1,7 +1,7 @@
 CXX = clang++
-CXXFLAGS = -std=c++20 -Wall -fsanitize=address -fno-omit-frame-pointer -pedantic-errors -g -I include
+# CXXFLAGS = -std=c++20 -Wall -fsanitize=address -fno-omit-frame-pointer -pedantic-errors -g -I include
 # CXXFLAGS = -std=c++20 -Wall -pedantic-errors -g -I include
-# CXXFLAGS = -std=c++20 -O3 -Wall -pedantic-errors -g -I include
+CXXFLAGS = -std=c++20 -O3 -Wall -pedantic-errors -g -I include
 # CXXFLAGS = -std=c++20 -O3 -fprofile-generate -Wall -pedantic-errors -g -I include
 # CXXFLAGS = -std=c++20 -O3 -fprofile-use=default.profdata -Wall -pedantic-errors -g -I include
 
@@ -15,14 +15,11 @@ SRCS = fixed.cpp
 
 OBJS = $(addprefix bin/, $(SRCS:.cpp=.o))
 
-MAIN = bin/fixed_test
-MAIN_OBJ = ${basename ${MAIN}}.o
-
 LIB =
 
 .PRECIOUS: bin/%.o
 
-all: ${MAIN} $(TEST_MAINS) ${LIB}
+all: $(TEST_MAINS) ${LIB}
 	@echo compile finished
 
 test: ${TEST_MAINS}
@@ -35,11 +32,8 @@ run_tests: ${TEST_MAINS}
 ${LIB}: ${OBJS}
 	ar r ${LIB} ${OBJS}
 
-${MAIN}: ${MAIN_OBJ} ${LIB}
-	${CXX} ${CXXFLAGS} ${MAIN_OBJ} ${LIB} -o ${MAIN}
-
 bin/%_test: bin/%_test.o ${LIB}
-	${CXX} ${CXXFLAGS} $@.o ${LIB} -o $@ 
+	${CXX} ${LDFLAGS} ${CXXFLAGS} $@.o ${LIB} -o $@ 
 
 bin/%.o: %.cpp ${HEADERS}
 	@ mkdir -p bin
