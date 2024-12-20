@@ -155,7 +155,7 @@ public:
         }
     }
     Fixed(double f) {
-        if(isnan(f)) {
+        if(std::isnan(f)) {
             fp = nan;
         } else {
             if(f >= MAX || f <= -MAX) {
