@@ -5,6 +5,7 @@
 
 BOOST_AUTO_TEST_CASE( basic_test ) {
     BOOST_TEST(std::string(Fixed("0"))=="0");
+    BOOST_TEST(std::string(Fixed("170"))=="170");
     BOOST_TEST(std::string(Fixed("0.1"))=="0.1");
     BOOST_TEST(std::string(Fixed("123.456"))=="123.456");
     BOOST_TEST(std::string(Fixed("1.123456789"))=="1.1234567");

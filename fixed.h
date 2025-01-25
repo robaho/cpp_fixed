@@ -133,7 +133,7 @@ public:
         std::from_chars(s.data(),end,i);
         int64_t f = 0;
         int64_t sign = 1;
-        if(decimal>=0) {
+        if(decimal!=std::string::npos) {
             auto cp = s.data() + decimal + 1;
             f = 0;
             for(int p = 0; p<nPlaces;p++) {
