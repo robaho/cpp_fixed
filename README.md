@@ -16,6 +16,6 @@ It builds using `make` by default with CLang. There is `Makefile.gcc` for using 
 
 Financial systems, especially trading systems need efficient, and stable decimal arithmetic.
 
-THis was designed as a drop-in replacement for double, but allow conversion to/from double for non-basic math operations.
+This was designed as a drop-in replacement for double, but allows conversion to/from double for advanced math operations.
 
-Primarily developed for use in [cpp_orderbook](https://github.com/robaho/cpp_orderbook).
+Primarily developed for use in [cpp-trader](https://github.com/robaho/cpp-trader).
